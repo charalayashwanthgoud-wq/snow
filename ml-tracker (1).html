@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ML A to Z — Complete Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Clash+Display:wght@400;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04080f;
+  --bg2:#080d18;
+  --surface:#0c1220;
+  --card:#101828;
+  --border:#1a2540;
+  --border2:#243050;
+  --a1:#00d4ff;
+  --a2:#0ea5e9;
+  --a3:#38bdf8;
+  --g1:#10b981;
+  --g2:#34d399;
+  --warn:#f59e0b;
+  --danger:#ef4444;
+  --text:#e8f4fd;
+  --text2:#94aec8;
+  --text3:#506480;
+  --mono:'DM Mono',monospace;
+  --display:'Clash Display','Instrument Sans',sans-serif;
+  --body:'Instrument Sans',sans-serif;
+  --easy-c:#10b981;--easy-bg:rgba(16,185,129,0.08);
+  --med-c:#f59e0b;--med-bg:rgba(245,158,11,0.08);
+  --hard-c:#ef4444;--hard-bg:rgba(239,68,68,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ANIMATED BG */
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+  background-size:60px 60px;}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.12;pointer-events:none;z-index:0}
+.orb1{width:600px;height:600px;background:radial-gradient(#0ea5e9,transparent);top:-200px;right:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(#10b981,transparent);bottom:-100px;left:-100px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;
+  background:rgba(4,8,15,0.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:56px}
+.logo{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-0.5px;
+  background:linear-gradient(120deg,var(--a1),var(--g1));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-stat{font-family:var(--mono);font-size:0.7rem;color:var(--text3);display:flex;align-items:center;gap:6px}
+.nav-stat b{color:var(--a1)}
+.nav-pill{background:var(--surface);border:1px solid var(--border2);border-radius:999px;
+  padding:4px 14px;font-family:var(--mono);font-size:0.68rem;color:var(--text2);cursor:pointer;transition:.15s}
+.nav-pill:hover{border-color:var(--a1);color:var(--a1)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 56px);position:relative;z-index:1}
+
+/* SIDEBAR */
+.sidebar{border-right:1px solid var(--border);background:var(--bg2);
+  position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;
+  padding:1rem 0 2rem}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sb-label{font-family:var(--mono);font-size:0.6rem;color:var(--text3);
+  padding:0.75rem 1.25rem 0.3rem;letter-spacing:0.1em;text-transform:uppercase}
+
+.mod-row{
+  display:flex;align-items:center;gap:10px;
+  padding:0.55rem 1.25rem;cursor:pointer;
+  border:none;background:none;width:100%;text-align:left;
+  border-left:2px solid transparent;transition:.15s;position:relative}
+.mod-row:hover{background:rgba(0,212,255,0.04)}
+.mod-row.active{background:rgba(0,212,255,0.06);border-left-color:var(--a1)}
+.mod-icon{font-size:0.95rem;width:22px;text-align:center;flex-shrink:0}
+.mod-label{flex:1;font-family:var(--body);font-size:0.82rem;font-weight:500;color:var(--text2);transition:.15s}
+.mod-row.active .mod-label,.mod-row:hover .mod-label{color:var(--text)}
+.mod-badge{font-family:var(--mono);font-size:0.62rem;color:var(--text3);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:1px 7px}
+.mod-arrow{font-size:0.65rem;color:var(--text3);transition:.2s}
+.mod-row.open .mod-arrow{transform:rotate(90deg);color:var(--a1)}
+
+.sub-list{overflow:hidden;max-height:0;transition:max-height .25s ease}
+.sub-list.open{max-height:600px}
+.sub-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:0.38rem 1.25rem 0.38rem 2.8rem;
+  background:none;border:none;cursor:pointer;
+  font-family:var(--body);font-size:0.76rem;color:var(--text3);
+  width:100%;text-align:left;transition:.12s}
+.sub-btn:hover{color:var(--a3)}
+.sub-btn.active{color:var(--a1);font-weight:500}
+.sub-dot{width:4px;height:4px;border-radius:50%;background:var(--border2);flex-shrink:0;transition:.12s}
+.sub-btn.active .sub-dot,.sub-btn:hover .sub-dot{background:var(--a1)}
+.sub-q-count{font-family:var(--mono);font-size:0.6rem;margin-left:auto;color:var(--text3)}
+
+/* MAIN */
+.main{padding:2rem 2.5rem;min-width:0}
+
+/* HOME */
+.home-hero{margin-bottom:2.5rem}
+.home-hero h1{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.8rem);
+  font-weight:700;letter-spacing:-1px;line-height:1.1}
+.home-hero h1 em{font-style:normal;
+  background:linear-gradient(120deg,var(--a1),var(--g1));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.home-hero p{color:var(--text2);margin-top:0.6rem;font-size:0.92rem;max-width:520px;line-height:1.6}
+
+.overall-bar{margin-top:1.5rem;max-width:520px}
+.bar-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.68rem;color:var(--text3);margin-bottom:6px}
+.bar-head span{color:var(--a1)}
+.bar-track{height:5px;background:var(--border);border-radius:999px}
+.bar-fill{height:5px;border-radius:999px;background:linear-gradient(90deg,var(--a2),var(--g1));transition:width .6s}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:2rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:1rem;transition:.15s}
+.stat-card:hover{border-color:var(--border2)}
+.stat-card .sc-val{font-family:var(--display);font-size:1.6rem;font-weight:700;color:var(--text)}
+.stat-card .sc-label{font-family:var(--mono);font-size:0.65rem;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.1rem;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,0.03),transparent);opacity:0;transition:.18s}
+.mc:hover{border-color:var(--border2);transform:translateY(-2px)}
+.mc:hover::before{opacity:1}
+.mc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.6rem}
+.mc-icon{font-size:1.5rem}
+.mc-pct{font-family:var(--mono);font-size:0.65rem;color:var(--text3)}
+.mc-name{font-family:var(--display);font-size:0.92rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.mc-sub{font-size:0.72rem;color:var(--text3);margin-bottom:10px}
+.mc-bar{height:3px;background:var(--border);border-radius:999px;margin-bottom:6px}
+.mc-fill{height:3px;border-radius:999px;background:linear-gradient(90deg,var(--a2),var(--g1))}
+.mc-foot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.62rem;color:var(--text3)}
+.mc-foot b{color:var(--g1)}
+
+/* TOPIC VIEW */
+.breadcrumb{font-family:var(--mono);font-size:0.7rem;color:var(--text3);margin-bottom:1.5rem;display:flex;align-items:center;gap:8px}
+.breadcrumb .bc-sep{color:var(--border2)}
+.breadcrumb .bc-cur{color:var(--a1)}
+.topic-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+.topic-title{font-family:var(--display);font-size:1.5rem;font-weight:700;letter-spacing:-.5px}
+.topic-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.tag{font-family:var(--mono);font-size:0.65rem;padding:3px 10px;border-radius:999px;border:1px solid}
+.tag.all{border-color:var(--a1);color:var(--a1)}
+.tag.easy{border-color:var(--easy-c);color:var(--easy-c)}
+.tag.med{border-color:var(--med-c);color:var(--med-c)}
+.tag.hard{border-color:var(--hard-c);color:var(--hard-c)}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:860px}
+thead tr{background:var(--surface);border-bottom:1px solid var(--border)}
+thead th{padding:.75rem 1rem;text-align:left;font-family:var(--mono);
+  font-size:0.65rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:.1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(0,212,255,0.03)}
+td{padding:.7rem 1rem;font-size:0.84rem;vertical-align:middle}
+
+.q-num{font-family:var(--mono);font-size:0.65rem;color:var(--text3)}
+.chk{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s}
+.chk.done{background:var(--g1);border-color:var(--g1)}
+.chk.done::after{content:'✓';color:#fff;font-size:9px;font-weight:700}
+.q-name{font-weight:500;color:var(--text)}
+.q-name.done{color:var(--text3);text-decoration:line-through}
+
+.diff{font-family:var(--mono);font-size:0.63rem;font-weight:500;padding:2px 8px;border-radius:999px}
+.diff.beginner{background:rgba(16,185,129,.1);color:var(--easy-c)}
+.diff.intermediate{background:rgba(245,158,11,.1);color:var(--med-c)}
+.diff.advanced{background:rgba(239,68,68,.1);color:var(--hard-c)}
+
+.lnk{display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:0.63rem;padding:3px 9px;
+  border:1px solid var(--border2);border-radius:6px;color:var(--text3);
+  text-decoration:none;transition:.13s;white-space:nowrap;cursor:pointer;background:none}
+.lnk:hover{border-color:var(--a1);color:var(--a1)}
+.lnk.yt:hover{border-color:#ff4040;color:#ff4040}
+.lnk.art:hover{border-color:var(--g1);color:var(--g1)}
+.links{display:flex;gap:5px;flex-wrap:wrap}
+
+.empty{text-align:center;padding:5rem 2rem;color:var(--text3)}
+.empty .e-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.5}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .main{padding:1.5rem 1rem}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+
+<nav>
+  <div class="logo">◈ ML A to Z</div>
+  <div class="nav-right">
+    <div class="nav-stat">Solved <b id="ns">0</b></div>
+    <div class="nav-stat">Total <b id="nt">0</b></div>
+    <div class="nav-stat">Streak <b>🔥 5</b></div>
+    <button class="nav-pill" onclick="goHome()">⌂ Home</button>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="sidebar" id="sidebar"></aside>
+<main class="main" id="main"></main>
+</div>
+
+<script>
+/* =========================================================
+   DATA — Machine Learning A to Z
+   ========================================================= */
+const MODS = [
+ {id:"math",icon:"∑",name:"Mathematics for ML",subs:[
+   {id:"linear-algebra",name:"Linear Algebra"},
+   {id:"calculus",name:"Calculus & Optimization"},
+   {id:"probability",name:"Probability & Statistics"},
+   {id:"information-theory",name:"Information Theory"},
+ ]},
+ {id:"python",icon:"🐍",name:"Python for ML",subs:[
+   {id:"numpy",name:"NumPy"},
+   {id:"pandas",name:"Pandas"},
+   {id:"matplotlib",name:"Matplotlib & Seaborn"},
+   {id:"scipy",name:"SciPy"},
+ ]},
+ {id:"eda",icon:"🔍",name:"Exploratory Data Analysis",subs:[
+   {id:"data-types",name:"Data Types & Structures"},
+   {id:"statistics",name:"Descriptive Statistics"},
+   {id:"visualization",name:"Data Visualization"},
+   {id:"correlation",name:"Correlation & Causation"},
+ ]},
+ {id:"preprocessing",icon:"⚙",name:"Data Preprocessing",subs:[
+   {id:"cleaning",name:"Data Cleaning"},
+   {id:"encoding",name:"Encoding Categorical Data"},
+   {id:"scaling",name:"Feature Scaling"},
+   {id:"imputation",name:"Missing Value Imputation"},
+   {id:"outliers",name:"Outlier Detection"},
+ ]},
+ {id:"feature-eng",icon:"✦",name:"Feature Engineering",subs:[
+   {id:"selection",name:"Feature Selection"},
+   {id:"extraction",name:"Feature Extraction"},
+   {id:"creation",name:"Feature Creation"},
+   {id:"dim-reduction",name:"Dimensionality Reduction"},
+ ]},
+ {id:"supervised",icon:"◈",name:"Supervised Learning",subs:[
+   {id:"regression",name:"Regression"},
+   {id:"classification",name:"Classification"},
+   {id:"decision-trees",name:"Decision Trees"},
+   {id:"ensemble",name:"Ensemble Methods"},
+   {id:"svm",name:"Support Vector Machines"},
+   {id:"knn",name:"K-Nearest Neighbors"},
+   {id:"naive-bayes",name:"Naive Bayes"},
+ ]},
+ {id:"unsupervised",icon:"◎",name:"Unsupervised Learning",subs:[
+   {id:"clustering",name:"Clustering"},
+   {id:"dim-red",name:"Dimensionality Reduction"},
+   {id:"anomaly",name:"Anomaly Detection"},
+   {id:"association",name:"Association Rules"},
+ ]},
+ {id:"semi-supervised",icon:"◑",name:"Semi-Supervised Learning",subs:[
+   {id:"label-propagation",name:"Label Propagation"},
+   {id:"self-training",name:"Self-Training"},
+ ]},
+ {id:"reinforcement",icon:"▶",name:"Reinforcement Learning",subs:[
+   {id:"mdp",name:"MDP & Bellman"},
+   {id:"q-learning",name:"Q-Learning"},
+   {id:"policy-gradient",name:"Policy Gradient"},
+   {id:"deep-rl",name:"Deep RL (DQN, PPO, A3C)"},
+ ]},
+ {id:"neural-nets",icon:"⬡",name:"Neural Networks",subs:[
+   {id:"perceptron",name:"Perceptron & MLP"},
+   {id:"backprop",name:"Backpropagation"},
+   {id:"activations",name:"Activation Functions"},
+   {id:"optimizers",name:"Optimizers"},
+   {id:"regularization",name:"Regularization"},
+   {id:"batch-norm",name:"Batch & Layer Norm"},
+ ]},
+ {id:"cnn",icon:"⊞",name:"Convolutional Neural Networks",subs:[
+   {id:"conv-layers",name:"Conv Layers & Pooling"},
+   {id:"architectures",name:"Architectures (LeNet→EfficientNet)"},
+   {id:"transfer",name:"Transfer Learning"},
+   {id:"object-detection",name:"Object Detection"},
+   {id:"segmentation",name:"Image Segmentation"},
+ ]},
+ {id:"rnn",icon:"↺",name:"Recurrent Neural Networks",subs:[
+   {id:"rnn-basics",name:"RNN Basics"},
+   {id:"lstm",name:"LSTM & GRU"},
+   {id:"seq2seq",name:"Seq2Seq & Attention"},
+   {id:"time-series",name:"Time Series Forecasting"},
+ ]},
+ {id:"transformers",icon:"⬡",name:"Transformers & Attention",subs:[
+   {id:"attention",name:"Self-Attention Mechanism"},
+   {id:"bert",name:"BERT & Variants"},
+   {id:"gpt",name:"GPT Family"},
+   {id:"vit",name:"Vision Transformer (ViT)"},
+   {id:"t5",name:"T5 & Encoder-Decoder"},
+ ]},
+ {id:"nlp",icon:"💬",name:"Natural Language Processing",subs:[
+   {id:"text-preprocessing",name:"Text Preprocessing"},
+   {id:"embeddings",name:"Word Embeddings (W2V, GloVe)"},
+   {id:"language-models",name:"Language Models"},
+   {id:"ner",name:"NER & POS Tagging"},
+   {id:"sentiment",name:"Sentiment Analysis"},
+   {id:"text-classification",name:"Text Classification"},
+   {id:"summarization",name:"Summarization & QA"},
+ ]},
+ {id:"cv",icon:"👁",name:"Computer Vision",subs:[
+   {id:"image-basics",name:"Image Basics & Filters"},
+   {id:"feature-cv",name:"Feature Descriptors (SIFT, ORB)"},
+   {id:"classification-cv",name:"Image Classification"},
+   {id:"gan",name:"GANs & Generative Models"},
+   {id:"diffusion",name:"Diffusion Models"},
+ ]},
+ {id:"generative",icon:"✧",name:"Generative AI",subs:[
+   {id:"vae",name:"Variational Autoencoders"},
+   {id:"gan-types",name:"GAN Variants (CycleGAN, StyleGAN)"},
+   {id:"llm",name:"Large Language Models"},
+   {id:"prompt-eng",name:"Prompt Engineering"},
+   {id:"rag",name:"RAG & Vector Databases"},
+   {id:"fine-tuning",name:"Fine-Tuning (LoRA, PEFT)"},
+ ]},
+ {id:"model-eval",icon:"📊",name:"Model Evaluation",subs:[
+   {id:"metrics",name:"Evaluation Metrics"},
+   {id:"cross-val",name:"Cross Validation"},
+   {id:"bias-variance",name:"Bias-Variance Tradeoff"},
+   {id:"roc-auc",name:"ROC, AUC & PR Curves"},
+   {id:"hyperparams",name:"Hyperparameter Tuning"},
+ ]},
+ {id:"mlops",icon:"⚡",name:"MLOps",subs:[
+   {id:"versioning",name:"Data & Model Versioning"},
+   {id:"pipelines",name:"ML Pipelines"},
+   {id:"deployment",name:"Model Deployment"},
+   {id:"monitoring",name:"Model Monitoring"},
+   {id:"docker-k8s",name:"Docker & Kubernetes for ML"},
+ ]},
+ {id:"frameworks",icon:"🔧",name:"ML Frameworks",subs:[
+   {id:"sklearn",name:"Scikit-Learn"},
+   {id:"tensorflow",name:"TensorFlow & Keras"},
+   {id:"pytorch",name:"PyTorch"},
+   {id:"huggingface",name:"HuggingFace Transformers"},
+   {id:"xgboost",name:"XGBoost & LightGBM"},
+ ]},
+ {id:"advanced",icon:"⬛",name:"Advanced Topics",subs:[
+   {id:"federated",name:"Federated Learning"},
+   {id:"graph-ml",name:"Graph Neural Networks"},
+   {id:"meta-learning",name:"Meta-Learning & Few-Shot"},
+   {id:"causal",name:"Causal Inference"},
+   {id:"explainability",name:"XAI & Model Interpretability"},
+   {id:"multimodal",name:"Multimodal Learning"},
+ ]},
+];
+
+/* Questions per sub — key: modId-subId */
+const QS = {
+"math-linear-algebra":[
+ {id:1,n:"Vectors, Scalars & Vector Operations",d:"beginner",p:"https://www.khanacademy.org/math/linear-algebra",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/watch?v=fNk_zzaMoSs",a:"https://towardsdatascience.com"},
+ {id:2,n:"Matrix Operations (Add, Multiply, Transpose)",d:"beginner",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/watch?v=kYB8IZa5AuE",a:"https://towardsdatascience.com"},
+ {id:3,n:"Determinant & Inverse of a Matrix",d:"intermediate",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:4,n:"Eigenvalues & Eigenvectors",d:"intermediate",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:5,n:"Singular Value Decomposition (SVD)",d:"advanced",p:"https://numpy.org/doc",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+],
+"math-calculus":[
+ {id:6,n:"Derivatives & Chain Rule",d:"beginner",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:7,n:"Partial Derivatives & Gradients",d:"intermediate",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:8,n:"Gradient Descent (Batch, SGD, Mini-Batch)",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/watch?v=IHZwWFHWa-w",a:"https://towardsdatascience.com"},
+ {id:9,n:"Convex vs Non-Convex Optimization",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:10,n:"Lagrange Multipliers & Constrained Optimization",d:"advanced",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://mathsisfun.com",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+],
+"math-probability":[
+ {id:11,n:"Probability Fundamentals (Bayes Theorem)",d:"beginner",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://seeing-theory.brown.edu",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:12,n:"Random Variables & Distributions",d:"beginner",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://seeing-theory.brown.edu",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:13,n:"Maximum Likelihood Estimation (MLE)",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://seeing-theory.brown.edu",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:14,n:"Central Limit Theorem & Hypothesis Testing",d:"intermediate",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://seeing-theory.brown.edu",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"math-information-theory":[
+ {id:15,n:"Entropy & Information Gain",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:16,n:"KL Divergence & Cross-Entropy",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:17,n:"Mutual Information",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"python-numpy":[
+ {id:18,n:"Arrays, Indexing & Slicing",d:"beginner",p:"https://numpy.org/doc",s:"https://github.com",e:"https://numpy.org/doc",y:"https://www.youtube.com/@sentdex",a:"https://realpython.com"},
+ {id:19,n:"Broadcasting & Vectorization",d:"intermediate",p:"https://numpy.org/doc",s:"https://github.com",e:"https://numpy.org/doc",y:"https://www.youtube.com/@sentdex",a:"https://realpython.com"},
+ {id:20,n:"Linear Algebra with NumPy",d:"intermediate",p:"https://numpy.org/doc",s:"https://github.com",e:"https://numpy.org/doc",y:"https://www.youtube.com/@sentdex",a:"https://realpython.com"},
+],
+"python-pandas":[
+ {id:21,n:"Series & DataFrame Basics",d:"beginner",p:"https://pandas.pydata.org/docs",s:"https://github.com",e:"https://pandas.pydata.org/docs",y:"https://www.youtube.com/@coreymshafer",a:"https://realpython.com"},
+ {id:22,n:"GroupBy, Merge & Reshape",d:"intermediate",p:"https://pandas.pydata.org/docs",s:"https://github.com",e:"https://pandas.pydata.org/docs",y:"https://www.youtube.com/@coreymshafer",a:"https://realpython.com"},
+ {id:23,n:"Time Series with Pandas",d:"intermediate",p:"https://pandas.pydata.org/docs",s:"https://github.com",e:"https://pandas.pydata.org/docs",y:"https://www.youtube.com/@coreymshafer",a:"https://realpython.com"},
+],
+"python-matplotlib":[
+ {id:24,n:"Matplotlib Basics: Line, Bar, Scatter",d:"beginner",p:"https://matplotlib.org/stable/",s:"https://github.com",e:"https://matplotlib.org",y:"https://www.youtube.com/@coreymshafer",a:"https://realpython.com"},
+ {id:25,n:"Seaborn Statistical Plots",d:"beginner",p:"https://seaborn.pydata.org",s:"https://github.com",e:"https://seaborn.pydata.org",y:"https://www.youtube.com/@sentdex",a:"https://realpython.com"},
+ {id:26,n:"Plotly Interactive Visualizations",d:"intermediate",p:"https://plotly.com/python/",s:"https://github.com",e:"https://plotly.com",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+],
+"eda-statistics":[
+ {id:27,n:"Mean, Median, Mode, Variance",d:"beginner",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:28,n:"Skewness & Kurtosis",d:"intermediate",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:29,n:"Box Plots & Detecting Outliers (IQR)",d:"beginner",p:"https://www.khanacademy.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"preprocessing-cleaning":[
+ {id:30,n:"Handling Missing Values",d:"beginner",p:"https://pandas.pydata.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:31,n:"Removing Duplicates",d:"beginner",p:"https://pandas.pydata.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:32,n:"Data Type Conversions",d:"beginner",p:"https://pandas.pydata.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+],
+"preprocessing-encoding":[
+ {id:33,n:"Label Encoding & Ordinal Encoding",d:"beginner",p:"https://scikit-learn.org/stable/",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:34,n:"One-Hot Encoding",d:"beginner",p:"https://scikit-learn.org/stable/",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:35,n:"Target Encoding & Binary Encoding",d:"intermediate",p:"https://scikit-learn.org/stable/",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"preprocessing-scaling":[
+ {id:36,n:"Min-Max Normalization",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:37,n:"Standardization (Z-score)",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:38,n:"Robust Scaler",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"feature-eng-selection":[
+ {id:39,n:"Filter Methods (Chi-Square, ANOVA)",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:40,n:"Wrapper Methods (RFE)",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:41,n:"Embedded Methods (LASSO, Ridge)",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"feature-eng-dim-reduction":[
+ {id:42,n:"PCA — Principal Component Analysis",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:43,n:"t-SNE",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:44,n:"UMAP",d:"advanced",p:"https://umap-learn.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:45,n:"LDA — Linear Discriminant Analysis",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"supervised-regression":[
+ {id:46,n:"Linear Regression",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:47,n:"Polynomial Regression",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:48,n:"Ridge & Lasso Regression",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:49,n:"Elastic Net",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"supervised-classification":[
+ {id:50,n:"Logistic Regression",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:51,n:"Binary vs Multiclass Classification",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:52,n:"Imbalanced Classification (SMOTE)",d:"advanced",p:"https://imbalanced-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"supervised-decision-trees":[
+ {id:53,n:"Decision Tree Algorithm & Splitting Criteria",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:54,n:"Pruning (Pre & Post)",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"supervised-ensemble":[
+ {id:55,n:"Bagging & Random Forest",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:56,n:"Boosting: AdaBoost",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:57,n:"Gradient Boosting (GBM)",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:58,n:"XGBoost, LightGBM & CatBoost",d:"advanced",p:"https://xgboost.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:59,n:"Stacking & Blending",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"supervised-svm":[
+ {id:60,n:"Linear SVM",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:61,n:"Kernel Trick (RBF, Polynomial)",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:62,n:"SVR — Support Vector Regression",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"supervised-knn":[
+ {id:63,n:"KNN Algorithm & Distance Metrics",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:64,n:"Choosing K & Curse of Dimensionality",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"unsupervised-clustering":[
+ {id:65,n:"K-Means Clustering",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:66,n:"Hierarchical Clustering",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:67,n:"DBSCAN",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:68,n:"Gaussian Mixture Models (GMM)",d:"advanced",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"reinforcement-q-learning":[
+ {id:69,n:"Q-Learning Algorithm",d:"intermediate",p:"https://gymnasium.farama.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:70,n:"Epsilon-Greedy Exploration",d:"intermediate",p:"https://gymnasium.farama.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+],
+"reinforcement-deep-rl":[
+ {id:71,n:"DQN — Deep Q-Network",d:"advanced",p:"https://gymnasium.farama.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:72,n:"PPO — Proximal Policy Optimization",d:"advanced",p:"https://stable-baselines3.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:73,n:"A3C — Asynchronous Advantage Actor-Critic",d:"advanced",p:"https://stable-baselines3.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+],
+"neural-nets-perceptron":[
+ {id:74,n:"Perceptron & Multi-Layer Perceptron",d:"beginner",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:75,n:"Forward Propagation",d:"beginner",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+],
+"neural-nets-backprop":[
+ {id:76,n:"Chain Rule in Neural Networks",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:77,n:"Vanishing & Exploding Gradients",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"neural-nets-activations":[
+ {id:78,n:"Sigmoid, Tanh, ReLU",d:"beginner",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:79,n:"Leaky ReLU, GELU, Swish",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:80,n:"Softmax & Output Activations",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"neural-nets-optimizers":[
+ {id:81,n:"SGD with Momentum",d:"intermediate",p:"https://pytorch.org/docs",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:82,n:"Adam, AdaGrad, RMSProp",d:"intermediate",p:"https://pytorch.org/docs",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:83,n:"Learning Rate Schedulers",d:"advanced",p:"https://pytorch.org/docs",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"neural-nets-regularization":[
+ {id:84,n:"L1 & L2 Regularization",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:85,n:"Dropout",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:86,n:"Early Stopping",d:"beginner",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://ml-cheatsheet.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"cnn-conv-layers":[
+ {id:87,n:"Convolution Operation & Filters",d:"beginner",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:88,n:"Padding, Stride & Pooling",d:"beginner",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"cnn-architectures":[
+ {id:89,n:"LeNet, AlexNet, VGG",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:90,n:"ResNet & Skip Connections",d:"intermediate",p:"https://pytorch.org/hub",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:91,n:"Inception & MobileNet",d:"advanced",p:"https://pytorch.org/hub",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:92,n:"EfficientNet",d:"advanced",p:"https://pytorch.org/hub",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"cnn-transfer":[
+ {id:93,n:"Transfer Learning Concepts",d:"intermediate",p:"https://pytorch.org/tutorials",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:94,n:"Fine-Tuning Pre-trained Models",d:"intermediate",p:"https://pytorch.org/tutorials",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"rnn-lstm":[
+ {id:95,n:"LSTM Architecture & Gates",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://colah.github.io",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:96,n:"GRU — Gated Recurrent Unit",d:"intermediate",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://colah.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:97,n:"Bidirectional LSTM",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://colah.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"rnn-seq2seq":[
+ {id:98,n:"Encoder-Decoder Architecture",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:99,n:"Attention Mechanism (Bahdanau)",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+],
+"transformers-attention":[
+ {id:100,n:"Scaled Dot-Product Attention",d:"advanced",p:"https://arxiv.org/abs/1706.03762",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@3blue1brown",a:"https://towardsdatascience.com"},
+ {id:101,n:"Multi-Head Attention",d:"advanced",p:"https://arxiv.org/abs/1706.03762",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:102,n:"Positional Encoding",d:"advanced",p:"https://arxiv.org/abs/1706.03762",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"transformers-bert":[
+ {id:103,n:"BERT Architecture & Pre-training Tasks",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:104,n:"RoBERTa, DistilBERT, ALBERT",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"transformers-gpt":[
+ {id:105,n:"GPT-1, GPT-2, GPT-3 Architecture",d:"advanced",p:"https://platform.openai.com/docs",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@andrejkarpathy",a:"https://towardsdatascience.com"},
+ {id:106,n:"Causal Language Modeling & Autoregressive",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@andrejkarpathy",a:"https://towardsdatascience.com"},
+],
+"nlp-embeddings":[
+ {id:107,n:"Word2Vec (CBOW & Skip-Gram)",d:"intermediate",p:"https://radimrehurek.com/gensim",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:108,n:"GloVe & FastText",d:"intermediate",p:"https://radimrehurek.com/gensim",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:109,n:"Contextual Embeddings (ELMo, BERT)",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"nlp-sentiment":[
+ {id:110,n:"Rule-Based Sentiment (VADER)",d:"beginner",p:"https://www.nltk.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:111,n:"ML-Based Sentiment Analysis",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:112,n:"Fine-Tuning BERT for Sentiment",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"generative-llm":[
+ {id:113,n:"LLM Architecture Overview",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://jalammar.github.io",y:"https://www.youtube.com/@andrejkarpathy",a:"https://towardsdatascience.com"},
+ {id:114,n:"Tokenization (BPE, WordPiece, SentencePiece)",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@andrejkarpathy",a:"https://towardsdatascience.com"},
+ {id:115,n:"RLHF — Reinforcement Learning from Human Feedback",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"generative-prompt-eng":[
+ {id:116,n:"Zero-Shot, Few-Shot, Chain-of-Thought",d:"intermediate",p:"https://www.promptingguide.ai",s:"https://github.com",e:"https://www.promptingguide.ai",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:117,n:"ReAct, Tree-of-Thought",d:"advanced",p:"https://www.promptingguide.ai",s:"https://github.com",e:"https://www.promptingguide.ai",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"generative-rag":[
+ {id:118,n:"RAG Pipeline Architecture",d:"advanced",p:"https://docs.langchain.com",s:"https://github.com",e:"https://www.pinecone.io/learn",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:119,n:"Vector Databases (FAISS, Pinecone, ChromaDB)",d:"advanced",p:"https://docs.langchain.com",s:"https://github.com",e:"https://www.pinecone.io/learn",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:120,n:"Embedding Models & Similarity Search",d:"advanced",p:"https://docs.langchain.com",s:"https://github.com",e:"https://www.pinecone.io/learn",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"generative-fine-tuning":[
+ {id:121,n:"Full Fine-Tuning",d:"advanced",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:122,n:"LoRA — Low-Rank Adaptation",d:"advanced",p:"https://huggingface.co/docs/peft",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:123,n:"QLoRA — Quantized LoRA",d:"advanced",p:"https://huggingface.co/docs/peft",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"model-eval-metrics":[
+ {id:124,n:"Accuracy, Precision, Recall, F1",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:125,n:"MAE, MSE, RMSE, R²",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:126,n:"Confusion Matrix",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:127,n:"BLEU, ROUGE for NLP",d:"intermediate",p:"https://huggingface.co/docs",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"model-eval-cross-val":[
+ {id:128,n:"K-Fold & Stratified K-Fold",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:129,n:"Leave-One-Out CV",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+],
+"model-eval-hyperparams":[
+ {id:130,n:"Grid Search & Random Search",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:131,n:"Bayesian Optimization (Optuna)",d:"advanced",p:"https://optuna.org",s:"https://github.com",e:"https://optuna.readthedocs.io",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"mlops-deployment":[
+ {id:132,n:"REST API with FastAPI/Flask",d:"intermediate",p:"https://fastapi.tiangolo.com",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:133,n:"Streamlit & Gradio Apps",d:"beginner",p:"https://streamlit.io",s:"https://github.com",e:"https://streamlit.io/docs",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:134,n:"ONNX Model Export",d:"advanced",p:"https://onnx.ai",s:"https://github.com",e:"https://onnx.ai/docs",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"mlops-monitoring":[
+ {id:135,n:"Data & Concept Drift Detection",d:"advanced",p:"https://evidentlyai.com",s:"https://github.com",e:"https://evidentlyai.com/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:136,n:"Model Performance Monitoring",d:"advanced",p:"https://evidentlyai.com",s:"https://github.com",e:"https://evidentlyai.com/blog",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"frameworks-sklearn":[
+ {id:137,n:"Pipeline, ColumnTransformer",d:"intermediate",p:"https://scikit-learn.org",s:"https://github.com",e:"https://scikit-learn.org/stable/",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:138,n:"Model Persistence (joblib, pickle)",d:"beginner",p:"https://scikit-learn.org",s:"https://github.com",e:"https://scikit-learn.org",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+],
+"frameworks-pytorch":[
+ {id:139,n:"Tensors, Autograd & Computational Graph",d:"intermediate",p:"https://pytorch.org/tutorials",s:"https://github.com",e:"https://pytorch.org/tutorials",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:140,n:"Custom Datasets & DataLoader",d:"intermediate",p:"https://pytorch.org/tutorials",s:"https://github.com",e:"https://pytorch.org/tutorials",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+ {id:141,n:"Training Loop & Model Saving",d:"intermediate",p:"https://pytorch.org/tutorials",s:"https://github.com",e:"https://pytorch.org/tutorials",y:"https://www.youtube.com/@sentdex",a:"https://towardsdatascience.com"},
+],
+"advanced-graph-ml":[
+ {id:142,n:"Graph Convolutional Networks (GCN)",d:"advanced",p:"https://pytorch-geometric.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:143,n:"Graph Attention Networks (GAT)",d:"advanced",p:"https://pytorch-geometric.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"advanced-explainability":[
+ {id:144,n:"SHAP Values",d:"advanced",p:"https://shap.readthedocs.io",s:"https://github.com",e:"https://shap.readthedocs.io",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:145,n:"LIME — Local Interpretable Model Explanations",d:"advanced",p:"https://lime-ml.readthedocs.io",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@statquest",a:"https://towardsdatascience.com"},
+ {id:146,n:"Grad-CAM for CNNs",d:"advanced",p:"https://pytorch.org",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"cv-gan":[
+ {id:147,n:"GAN Architecture (Generator & Discriminator)",d:"advanced",p:"https://www.deeplearning.ai",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+ {id:148,n:"DCGAN & Conditional GAN",d:"advanced",p:"https://pytorch.org/tutorials",s:"https://github.com",e:"https://www.geeksforgeeks.org",y:"https://www.youtube.com/@deeplearningai",a:"https://towardsdatascience.com"},
+],
+"cv-diffusion":[
+ {id:149,n:"DDPM — Denoising Diffusion Probabilistic Models",d:"advanced",p:"https://huggingface.co/docs/diffusers",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@andrejkarpathy",a:"https://towardsdatascience.com"},
+ {id:150,n:"Stable Diffusion & Latent Diffusion",d:"advanced",p:"https://huggingface.co/docs/diffusers",s:"https://github.com",e:"https://huggingface.co/blog",y:"https://www.youtube.com/@andrejkarpathy",a:"https://towardsdatascience.com"},
+],
+};
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let solved = JSON.parse(localStorage.getItem('ml-solved') || '{}');
+let curMod = null, curSub = null, openMap = {};
+
+function totalQs() { return Object.values(QS).reduce((a,v)=>a+v.length,0); }
+function totalSolved() { return Object.keys(solved).filter(k=>solved[k]).length; }
+function modTotal(mod) { return mod.subs.reduce((a,s)=>a+(QS[mod.id+'-'+s.id]||[]).length,0); }
+function modSolved(mod) { return mod.subs.reduce((a,s)=>{
+  const q=QS[mod.id+'-'+s.id]||[]; return a+q.filter(x=>solved[x.id]).length;
+},0);}
+function subCount(modId,subId){ return (QS[modId+'-'+subId]||[]).length; }
+
+/* =========================================================
+   RENDER SIDEBAR
+   ========================================================= */
+function renderSidebar(){
+  let h='';
+  h+='<div class="sb-label">Modules</div>';
+  MODS.forEach(mod=>{
+    const isOpen=openMap[mod.id], isActive=curMod===mod.id;
+    h+=`<div>
+      <button class="mod-row ${isActive?'active':''} ${isOpen?'open':''}" onclick="toggleMod('${mod.id}')">
+        <span class="mod-icon">${mod.icon}</span>
+        <span class="mod-label">${mod.name}</span>
+        <span class="mod-badge">${modTotal(mod)}</span>
+        <span class="mod-arrow">›</span>
+      </button>
+      <div class="sub-list ${isOpen?'open':''}">`;
+    mod.subs.forEach(sub=>{
+      const isSubA=curMod===mod.id&&curSub===sub.id;
+      const cnt=subCount(mod.id,sub.id);
+      h+=`<button class="sub-btn ${isSubA?'active':''}" onclick="selectSub('${mod.id}','${sub.id}')">
+        <span class="sub-dot"></span>${sub.name}
+        ${cnt?`<span class="sub-q-count">${cnt}</span>`:''}
+      </button>`;
+    });
+    h+=`</div></div>`;
+  });
+  document.getElementById('sidebar').innerHTML=h;
+}
+
+/* =========================================================
+   RENDER HOME
+   ========================================================= */
+function goHome(){ curMod=null; curSub=null; renderSidebar(); renderHome(); }
+function renderHome(){
+  const total=totalQs(), sol=totalSolved(), pct=total?Math.round((sol/total)*100):0;
+  const begTotal=Object.values(QS).flat().filter(q=>q.d==='beginner').length;
+  const intTotal=Object.values(QS).flat().filter(q=>q.d==='intermediate').length;
+  const advTotal=Object.values(QS).flat().filter(q=>q.d==='advanced').length;
+  document.getElementById('nt').textContent=total;
+  document.getElementById('ns').textContent=sol;
+
+  let h=`<div class="home-hero">
+    <h1>Machine Learning <em>A to Z</em></h1>
+    <p>Complete roadmap from math foundations to cutting-edge generative AI — ${MODS.length} modules, ${total} topics.</p>
+    <div class="overall-bar">
+      <div class="bar-head"><span>${sol} / ${total} completed</span><span>${pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="sc-val">${MODS.length}</div><div class="sc-label">Modules</div></div>
+    <div class="stat-card"><div class="sc-val">${total}</div><div class="sc-label">Total Topics</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--g1)">${sol}</div><div class="sc-label">Solved</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--a1)">${pct}%</div><div class="sc-label">Progress</div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap">
+    <span class="tag easy">Beginner ${begTotal}</span>
+    <span class="tag med">Intermediate ${intTotal}</span>
+    <span class="tag hard">Advanced ${advTotal}</span>
+  </div>
+  <div class="modules-grid">`;
+
+  MODS.forEach(mod=>{
+    const t=modTotal(mod), s=modSolved(mod), p=t?Math.round((s/t)*100):0;
+    h+=`<div class="mc" onclick="selectMod('${mod.id}')">
+      <div class="mc-top"><span class="mc-icon">${mod.icon}</span><span class="mc-pct">${p}%</span></div>
+      <div class="mc-name">${mod.name}</div>
+      <div class="mc-sub">${mod.subs.length} subtopics · ${t} topics</div>
+      <div class="mc-bar"><div class="mc-fill" style="width:${p}%"></div></div>
+      <div class="mc-foot"><span><b>${s}</b> / ${t}</span><span style="color:var(--text3)">${mod.subs.map(s=>s.name).slice(0,2).join(', ')}…</span></div>
+    </div>`;
+  });
+  h+=`</div>`;
+  document.getElementById('main').innerHTML=h;
+}
+
+/* =========================================================
+   RENDER SUBTOPIC
+   ========================================================= */
+function renderSub(modId,subId){
+  const mod=MODS.find(m=>m.id===modId);
+  const sub=mod.subs.find(s=>s.id===subId);
+  const qs=QS[modId+'-'+subId]||[];
+  const beg=qs.filter(q=>q.d==='beginner').length;
+  const int=qs.filter(q=>q.d==='intermediate').length;
+  const adv=qs.filter(q=>q.d==='advanced').length;
+
+  let h=`<div class="breadcrumb">
+    <span style="cursor:pointer;color:var(--text2)" onclick="goHome()">Home</span>
+    <span class="bc-sep">›</span>
+    <span style="color:var(--text2)">${mod.name}</span>
+    <span class="bc-sep">›</span>
+    <span class="bc-cur">${sub.name}</span>
+  </div>
+  <div class="topic-head">
+    <div>
+      <div class="topic-title">${sub.name}</div>
+      <div class="topic-tags">
+        <span class="tag all">${qs.length} topics</span>
+        ${beg?`<span class="tag easy">Beginner ${beg}</span>`:''}
+        ${int?`<span class="tag med">Intermediate ${int}</span>`:''}
+        ${adv?`<span class="tag hard">Advanced ${adv}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+
+  if(!qs.length){
+    h+=`<div class="empty"><div class="e-ico">📭</div><p>No topics added yet.</p></div>`;
+  } else {
+    h+=`<div class="tbl-wrap"><table>
+      <thead><tr>
+        <th style="width:32px">#</th>
+        <th style="width:24px"></th>
+        <th>Topic / Concept</th>
+        <th style="width:100px">Level</th>
+        <th>Resource</th>
+        <th>Solution</th>
+        <th>Explanation</th>
+        <th>YouTube</th>
+        <th>Article</th>
+      </tr></thead>
+      <tbody>`;
+    qs.forEach((q,i)=>{
+      const done=!!solved[q.id];
+      h+=`<tr>
+        <td class="q-num">${i+1}</td>
+        <td><div class="chk ${done?'done':''}" onclick="toggleSolved(${q.id},this)"></div></td>
+        <td><span class="q-name ${done?'done':''}">${q.n}</span></td>
+        <td><span class="diff ${q.d}">${q.d}</span></td>
+        <td><a class="lnk" href="${q.p}" target="_blank">↗ Open</a></td>
+        <td><a class="lnk" href="${q.s}" target="_blank">{ } Code</a></td>
+        <td><a class="lnk art" href="${q.e}" target="_blank">✦ Read</a></td>
+        <td><a class="lnk yt" href="${q.y}" target="_blank">▶ Watch</a></td>
+        <td><a class="lnk art" href="${q.a}" target="_blank">✦ Blog</a></td>
+      </tr>`;
+    });
+    h+=`</tbody></table></div>`;
+  }
+  document.getElementById('main').innerHTML=h;
+  document.getElementById('ns').textContent=totalSolved();
+}
+
+/* =========================================================
+   INTERACTIONS
+   ========================================================= */
+function toggleSolved(id,el){
+  solved[id]=!solved[id];
+  localStorage.setItem('ml-solved',JSON.stringify(solved));
+  el.classList.toggle('done');
+  const nm=el.closest('tr').querySelector('.q-name');
+  nm.classList.toggle('done',solved[id]);
+  document.getElementById('ns').textContent=totalSolved();
+}
+function toggleMod(modId){
+  openMap[modId]=!openMap[modId];
+  if(openMap[modId]){
+    curMod=modId;
+    const mod=MODS.find(m=>m.id===modId);
+    if(mod&&mod.subs.length){ selectSub(modId,mod.subs[0].id); return; }
+  } else { curMod=null; curSub=null; }
+  renderSidebar(); renderHome();
+}
+function selectMod(modId){
+  openMap[modId]=true; curMod=modId;
+  const mod=MODS.find(m=>m.id===modId);
+  curSub=mod.subs[0].id;
+  renderSidebar(); renderSub(modId,curSub);
+}
+function selectSub(modId,subId){
+  curMod=modId; curSub=subId; openMap[modId]=true;
+  renderSidebar(); renderSub(modId,subId);
+}
+
+/* INIT */
+document.getElementById('nt').textContent=totalQs();
+document.getElementById('ns').textContent=totalSolved();
+renderSidebar(); renderHome();
+</script>
+</body>
+</html>
